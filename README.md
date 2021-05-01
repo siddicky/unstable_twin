@@ -1,7 +1,7 @@
 # Unstable Twin 
 TryHackMe | Unstable Twin -- Walkthrough
 
-Link to room: https://tryhackme.com/room/unstabletwin
+Link to the room: https://tryhackme.com/room/unstabletwin
 
 ## Lets go 
 
@@ -35,7 +35,7 @@ gobuster dir -u http://$IP/ -w /usr/share/wordlists/dirb/common.txt -x php,html
 ```
 "The login API needs to be called with the username and password fields.  It has not been fully tested yet so may not be full developed and secure"
 ```
-This doesn't really provide us with much information however is nice seagway to task 1.
+This doesn't provide us with much information however is a nice segway to task 1.
 
 ## Task 1
 
@@ -61,7 +61,7 @@ curl -v http://$IP/info
 < Build Number: 1.3.6-final
 < Server Name: Julias
 ```
-We did get some information however it's not for the server we're looking for. Let's run the command again with a higer verbose level.
+We did get some information; however, it's not for the server we're looking for. Let's rerun the command with a higher verbose level.
 
 ```
 curl -vv http://$IP/info
@@ -84,13 +84,13 @@ curl -vv http://$IP/info
 < Server Name: Vincent
 ```
 
-Okay, weird, the server changed. This might be the misconfiguration regarding the deployment the room was taking about. 
+Okay, weird, the server changed. This might be the misconfiguration regarding the deployment the room was talking about. 
 
 ## Task 3
 
-For this task conventional wisdom would dictate we fire up SQLMAP and enumerate the users, however, we know that there are serveral services running at the moment which might hamper our results. 
+For this task, conventional wisdom would dictate we fire up SQLMAP and enumerate the users; however, we know that several services are running at the moment, which might hamper our results. 
 
-Lets leverage the hidden API we came across which would help authenticate users. A simple python script running SQLi code would do the trick.
+Let's leverage the hidden API we came across, which would help authenticate users. A simple python script running SQLi code would do the trick.
 
 ```
 import requests
@@ -206,7 +206,7 @@ for i in ii:
 
 "The username or password passed are not correct."
 ```
-Success! This info will help the next two tasks.
+Success! This info will help in the following two tasks.
 
 ## Task 5
 
@@ -235,7 +235,7 @@ Press 'q' or Ctrl-C to abort, almost any other key for status
 Use the "--show" option to display all of the cracked passwords reliably
 Session completed
 ```
-We have successfully managed to crack it. One of the reasons for using john instead of hashcat is primarily because im running a VM, and as john is cpu extensive, it's preferrable to do so.
+We have successfully managed to crack it. One of the reasons for using john instead of hashcat is because I'm running a VM, and as john is cpu extensive, it's preferable to do so.
 
 ## Task 6
 
@@ -261,7 +261,7 @@ Now you have found my notes you now you need to put my extended family together.
 We need to GET their IMAGE for the family album.  These can be retrieved by NAME.
 ```
 
-Lets retrieve the images for all the users using the list from the database and the API details from the server_notes. As you can see, the word GET and IMAGE are provided as hints!
+Let's retrieve the images for all the users using the list from the database and the API details from the server_notes. As you can see, the word GET and IMAGE are provided as hints!
 
 ### Retrieving the images
 
@@ -271,7 +271,7 @@ Use the following template to retrieve all the images of the family members:
 curl -v http://$IP/get_image\?name\=[insert name] --output [name].jpg
 ```
 
-Also don't worry if you can't find certain images. Run each command twice to get the desired results (mainly because of the server misconfiguration).
+Also, don't worry if you can't find certain images. Run each command twice to get the desired results (mainly because of the server misconfiguration).
 
 ### Steghide to extract embeded data
 
