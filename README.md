@@ -37,6 +37,18 @@ gobuster dir -u http://$IP/ -w /usr/share/wordlists/dirb/common.txt -x php,html
 ```
 This doesn't provide us with much information however is a nice segway to task 1.
 
+Now that we have some information regarding it being a webserver, lets use a specific wordlist for web content and run a ffuf scan. 
+
+```
+ffuf -u 'http://10.10.196.10/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
+```
+
+```
+api                     [Status: 404, Size: 0, Words: 1, Lines: 1]
+info                    [Status: 200, Size: 148, Words: 29, Lines: 2]
+get_image               [Status: 500, Size: 291, Words: 38, Lines: 5]
+```
+
 ## Task 1
 
 Let's get more information about the API
@@ -90,7 +102,17 @@ Okay, weird, the server changed. This might be the misconfiguration regarding th
 
 For this task, conventional wisdom would dictate we fire up SQLMAP and enumerate the users; however, we know that several services are running at the moment, which might hamper our results. 
 
-Let's leverage the hidden API we came across, which would help authenticate users. A simple python script running SQLi code would do the trick.
+Let's run a final a ffuf scan on /api for good measure/
+
+```
+ffuf -u 'http://10.10.196.10/api/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
+```
+
+```
+login                   [Status: 405, Size: 178, Words: 20, Lines: 5]
+```
+
+Time to leverage the hidden API we came across, which would help authenticate users. A simple python script running SQLi code would do the trick.
 
 ```
 import requests
