@@ -318,6 +318,22 @@ curl -v http://$IP/get_image\?name\=[insert name] --output [name].jpg
 
 Also, don't worry if you can't find certain images. Run each command twice to get the desired results (mainly because of the server misconfiguration).
 
+### Alternatively you can find the images inside the /opt directory
+
+```
+[mary_ann@UnstableTwin ~]$ cd /opt
+[mary_ann@UnstableTwin opt]$ ls
+unstabletwin
+[mary_ann@UnstableTwin opt]$ cd unstabletwin
+[mary_ann@UnstableTwin unstabletwin]$ ls
+ database.db    queries.py                        Twins-Chloe-Webb.jpg
+ main_5000.py  'Twins (1988).html'                Twins-Danny-DeVito.jpg
+ main_5001.py   Twins-Arnold-Schwarzenegger.jpg   Twins-Kelly-Preston.jpg
+ __pycache__    Twins-Bonnie-Bartlett.jpg
+```
+
+You can simply compress the files using tar and then sending the files to your host machine using a simple python3 http server.
+
 ### Steghide to extract embeded data
 
 Use the following command for each of the images:
